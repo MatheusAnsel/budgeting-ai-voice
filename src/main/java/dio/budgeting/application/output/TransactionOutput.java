@@ -11,6 +11,10 @@ public record TransactionOutput(String id, String description, String category, 
                 transaction.getId().uuid().toString(),
                 transaction.getDescription(),
                 transaction.getCategory().name(),
-                BigDecimal.valueOf(transaction.getAmount()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+                toReais(transaction.getAmount()).doubleValue());
+    }
+
+    public static BigDecimal toReais(long amountInCents) {
+        return BigDecimal.valueOf(amountInCents).movePointLeft(2).setScale(2, RoundingMode.HALF_UP);
     }
 }
