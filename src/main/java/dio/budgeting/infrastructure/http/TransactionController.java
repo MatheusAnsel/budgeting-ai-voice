@@ -59,6 +59,9 @@ public class TransactionController {
 
     @PostMapping(value = "/ai", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "audio/mp3")
     ResponseEntity<Resource> transcribe(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("O arquivo de áudio está vazio");
+        }
         var userMessage = transcriptionModel.transcribe(file.getResource());
         var result = chatClient.prompt().user(userMessage).call().content();
 
