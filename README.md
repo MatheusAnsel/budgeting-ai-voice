@@ -151,11 +151,12 @@ Adicionadas `RESTAURANT` e `OTHER`. O prompt de sistema passou a instruir o mode
 
 ## O que aprendi
 
-- (completar) Tool calling com Spring AI e como expor casos de uso como tools.
-- (completar) Pipeline de áudio: transcrição, chat e text-to-speech.
-- (completar) Por que guardar dinheiro em centavos e converter só na borda.
-- (completar) Validação de invariantes no domínio e tratamento com `ProblemDetail`.
-- (completar) Testar sem depender de API externa.
+- **Tool calling com Spring AI**: anotar casos de uso com `@Tool` e registrá-los no `ChatClient` permite que o modelo escolha a operação certa sem que a IA acesse o banco diretamente. A regra de negócio continua na camada `application`, e o modelo só decide qual ferramenta chamar e com quais parâmetros.
+- **Pipeline de áudio**: o fluxo voz -> texto -> modelo -> texto -> voz é a composição de três modelos diferentes (`TranscriptionModel`, `ChatClient` e `TextToSpeechModel`). Cada etapa tem configuração própria (idioma, prompt de transcrição, voz, velocidade), e um erro em uma delas se propaga para a resposta final.
+- **Dinheiro em centavos**: guardar valores como inteiros em centavos evita erro de arredondamento de ponto flutuante, mas exige converter na borda e deixar claro para o modelo em que unidade cada ferramenta trabalha. O bug do `TransactionOutput` mostrou que uma conversão esquecida passa despercebida até alguém olhar o número com atenção.
+- **Não deixar o modelo fazer contas**: LLMs podem errar aritmética. Expor uma tool de soma e instruir o modelo a usá-la torna o total determinístico e testável.
+- **Invariantes no domínio**: validar no construtor de `Transaction` garante a regra em todos os caminhos de entrada (REST e IA) de uma vez. Com `@RestControllerAdvice` e `ProblemDetail`, o erro chega ao cliente como 400 padronizado em vez de 500.
+- **Testar sem depender de API externa**: com Mockito e testes unitários de domínio e casos de uso, a maior parte da lógica é verificada sem chave e sem rede. Os testes de integração com a OpenAI ficam condicionados à variável `OPENAI_API_KEY` com `@EnabledIfEnvironmentVariable`.
 
 ## Créditos
 
