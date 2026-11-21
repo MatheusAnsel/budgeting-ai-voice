@@ -1,5 +1,10 @@
 # Budgeting AI Voice
 
+![Java 25](https://img.shields.io/badge/Java-25-007396)
+![Spring Boot 4](https://img.shields.io/badge/Spring%20Boot-4.0-6DB33F)
+![Spring AI 2.0.0-M4](https://img.shields.io/badge/Spring%20AI-2.0.0--M4-6DB33F)
+![MySQL](https://img.shields.io/badge/MySQL-9-4479A1)
+
 API de controle de gastos com Spring Boot e Spring AI. Desafio do módulo Spring AI do Bootcamp Itaú Java com IA (DIO).
 
 ## O que o projeto faz
@@ -148,6 +153,14 @@ Adicionadas `RESTAURANT` e `OTHER`. O prompt de sistema passou a instruir o mode
 - **`/ai` sem limite de tamanho ou formato**: o endpoint aceita qualquer arquivo não vazio, sem validar tipo de mídia nem tamanho além do limite padrão de multipart do Spring. Um arquivo inválido só falha na chamada à OpenAI.
 - **Erros da OpenAI**: falhas de rede ou de autenticação com a OpenAI não têm tratamento específico; o cliente pode esperar as retentativas do Spring AI e receber um 500.
 - **Valores em `double` na resposta HTTP**: `TransactionResponse` expõe o valor como `double`. Funciona para exibição, mas não é o tipo ideal para dinheiro.
+
+## Próximos passos
+
+- Adicionar data à transação e uma tool de soma por período, para responder perguntas como "quanto gastei este mês?".
+- Validar tipo de mídia e tamanho do arquivo no `/ai` antes de chamar a OpenAI.
+- Tratar falhas da OpenAI com uma resposta de erro clara (`ProblemDetail` 502 ou 503) em vez de 500.
+- Trocar o `double` da resposta HTTP por `BigDecimal`.
+- Atualizar para a versão GA do Spring AI quando for lançada.
 
 ## O que aprendi
 
